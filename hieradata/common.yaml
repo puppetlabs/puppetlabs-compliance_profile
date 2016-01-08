@@ -1,12 +1,8 @@
 ---
 ######################################################################
 #                                                                    #
-# This is the default data for out-of-the-box compliance with        #
-# several regulations including:                                     #
-#   * STIG                                                           #
-#   * PCI                                                            #
-#   * CIS                                                            #
-#   * HIPAA                                                          #
+# This is the default data for NIST 800-53 and DISA Security         #
+# Technical Implementation Guides for Red Hat Enterprise Linux       #
 #                                                                    #
 # For more information on how to use Hiera, see:                     #
 #   * http://docs.puppetlabs.com/hiera/1/puppet.html                 #
@@ -26,17 +22,7 @@ client_nets :
 # The DNS domain search string.
 # Remember to put these in the appropriate order for your environment!
 dns::search :
-  - 'vm'
-
-# Version of the SIMP package set to use
-compliance::profile::simp_repository_version: '5.1.X'
-
-# Purge all unmanaged resources for each of the listed
-# resource types.
-compliance::profile::purge_unmanaged_resource_types:
-  - 'firewall'
-  - 'user'
-  - 'yumrepo'
+  - 'your.domain'
 
 # The DNS servers for your nodes
 dns::servers :
@@ -45,6 +31,13 @@ dns::servers :
 # === SSSD Options ===
 sssd::domains :
   - "LDAP"
+
+# Purge all unmanaged resources for each of the listed
+# resource types.
+compliance::profile::purge_unmanaged_resource_types:
+  - 'firewall'
+  - 'user'
+  - 'yumrepo'
 
 # === LDAP Options ===
 # Various LDAP-related settings. You *really* want to make sure that
@@ -55,22 +48,22 @@ sssd::domains :
 #
 # If you disable this, then modules will not attempt to use LDAP where
 # possible.
-use_ldap : true
-ldap::base_dn : 'dc=your,dc=domain'
-ldap::bind_dn : "cn=hostAuth,ou=Hosts,%{hiera('ldap::base_dn')}"
-ldap::bind_pw : 'your bind password'
-ldap::bind_hash : 'Generate this with slappasswd!'
-ldap::sync_dn : "cn=LDAPSync,ou=Hosts,%{hiera('ldap::base_dn')}"
-ldap::sync_pw : 'your sync password'
-ldap::sync_hash : 'Generate this with slappasswd!'
-ldap::root_dn : "cn=LDAPAdmin,ou=People,%{hiera('ldap::base_dn')}"
-ldap::root_hash : 'Generate this with slappasswd!'
-ldap::uri :
-  - "ldap://%{hiera('puppet::server')}"
-ldap::master : "ldap://%{hiera('puppet::server')}"
+#use_ldap : true
+#ldap::base_dn : 'dc=your,dc=domain'
+#ldap::bind_dn : "cn=hostAuth,ou=Hosts,%{hiera('ldap::base_dn')}"
+#ldap::bind_pw : 'your bind password'
+#ldap::bind_hash : 'Generate this with slappasswd!'
+#ldap::sync_dn : "cn=LDAPSync,ou=Hosts,%{hiera('ldap::base_dn')}"
+#ldap::sync_pw : 'your sync password'
+#ldap::sync_hash : 'Generate this with slappasswd!'
+#ldap::root_dn : "cn=LDAPAdmin,ou=People,%{hiera('ldap::base_dn')}"
+#ldap::root_hash : 'Generate this with slappasswd!'
+#ldap::uri :
+#  - "ldap://%{hiera('puppet::server')}"
+#ldap::master : ""
 
 # Your log server
-log_server : 'syslog.your.domain'
+# log_server : 'syslog.your.domain'
 
 # Your time servers
 #
@@ -96,6 +89,10 @@ ntpd::servers : {}
 #rsync::server : '127.0.0.1'
 #rsync::timeout : '1'
 
+# Set the verbosity of AIDE. Note we can’t
+# use the module’s default value since it fails in PE 2015.x
+aide::verbose: 5
+
 # SELinux is good
 #
 # Not all modules are compatible with SELinux in enforcing mode but
@@ -106,13 +103,10 @@ selinux::ensure : 'enforcing'
 # Whether or not to use auditd on this system.
 use_auditd : true
 
-# Whether or not to use iptables on this system.
-# If there is code that calls the IPTables native type directly, this
-# option may not function properly. We are looking into solutions for
-# this issue.
-#
+# We want to use the puppetlabs/firewall module rather than the 
+# SIMP iptables module.  This turns off the features in the SIMP
+# modules that use the simp/iptables module.
 use_iptables : false
 
 # Management of Specific Classes
 simplib::runlevel : '3'
-
