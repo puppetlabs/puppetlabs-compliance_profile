@@ -63,16 +63,16 @@ compliant way. The defined type does the following:
   managed by Puppet. It only supports RSA keys
 
 Example:
-  compliance::user { 'foo':
-    home                   => '/mnt/home/foo',
-    allowed_access_origins => ['192.168.1.0/24','1.2.3.4','5.6.7.8'],
-    authorized_keys        => [
-      'AAAAB3NzaC1yc2EAAAABIwAAAQEA6NF8iallvQVp22WDkTkyrtvp9eWW6A8YVr+kz4TjGYe7gHzIw+niNltGEFHzD8+v1I2YJ6oXevct1YeS0o9HZyN1Q9qgCgzUFtdOKLv6IedplqoPkcmF0aYet2PkEDo3MlTBckFXPITAMzF8dJSIFo9D8HfdOV0IAdx4O7PtixWKn5y2hMNG0zQPyUecp4pzC6kivAIhyfHilFR61RGL+GPXQ2MWZWFYbAGjyiYJnAmCP3NOTd0jMZEnDkbUvxhMmBYSdETk1rRgm+R4LOzFUGaHqHDLKLX+FIPKcF96hrucXzcWyLbIbEgE98OHlnVYCzRdK8jlqm8tehUc9c9WhQ==',
-    ],
-  }
 
-Note the keys can be encrypted with eyaml as a parameter in Hiera for safe
-storage in version control.
+    compliance::user { 'foo':
+      home                   => '/mnt/home/foo',
+      allowed_access_origins => ['192.168.1.0/24','1.2.3.4','5.6.7.8'],
+      authorized_keys        => [
+        'AAAAB3NzaC1yc2EAAAABIwAAAQEA6NF8iallvQVp22WDkTkyrtvp9eWW6A8YVr+kz4TjGYe7gHzIw+niNltGEFHzD8+v1I2YJ6oXevct1YeS0o9HZyN1Q9qgCgzUFtdOKLv6IedplqoPkcmF0aYet2PkEDo3MlTBckFXPITAMzF8dJSIFo9D8HfdOV0IAdx4O7PtixWKn5y2hMNG0zQPyUecp4pzC6kivAIhyfHilFR61RGL+GPXQ2MWZWFYbAGjyiYJnAmCP3NOTd0jMZEnDkbUvxhMmBYSdETk1rRgm+R4LOzFUGaHqHDLKLX+FIPKcF96hrucXzcWyLbIbEgE98OHlnVYCzRdK8jlqm8tehUc9c9WhQ==',
+      ],
+    }
+
+Note the authorized SSH keys can be encrypted with [eyaml](https://puppetlabs.com/blog/encrypt-your-data-using-hiera-eyaml) as a parameter in Hiera for safe storage in version control.
 
 # Compliance Coverage
 
@@ -100,7 +100,7 @@ This does a few things:
 The following CCEs and CVEs are covered by the NSA modules
 
 ### CCEs
-
+||||
 |-------------|-------------|-------------|-------------| 
 | CCE-27222-9 | CCE-27024-9 | CCE-27135-3 | CCE-26610-6 | 
 | CCE-26610-6 | CCE-27522-2 | CCE-27550-3 | CCE-27237-7 | 
@@ -165,6 +165,7 @@ The following CCEs and CVEs are covered by the NSA modules
 
 ### CVEs
 
+||||
 |---------------|---------------|---------------|---------------| 
 | CVE-2013-5211 | CVE-2013-5211 | CVE-2013-5211 | CVE-2013-5211 | 
 | CVE-2014-3566 | CVE-2014-3566 | CVE-2014-3566 | CVE-2014-3566 | 
