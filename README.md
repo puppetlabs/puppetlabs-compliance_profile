@@ -100,7 +100,7 @@ This does a few things:
 The following CCEs and CVEs are covered by the NSA modules
 
 ### CCEs
-||||
+|||||
 |-------------|-------------|-------------|-------------| 
 | CCE-27222-9 | CCE-27024-9 | CCE-27135-3 | CCE-26610-6 | 
 | CCE-26610-6 | CCE-27522-2 | CCE-27550-3 | CCE-27237-7 | 
@@ -165,7 +165,7 @@ The following CCEs and CVEs are covered by the NSA modules
 
 ### CVEs
 
-||||
+|||||
 |---------------|---------------|---------------|---------------| 
 | CVE-2013-5211 | CVE-2013-5211 | CVE-2013-5211 | CVE-2013-5211 | 
 | CVE-2014-3566 | CVE-2014-3566 | CVE-2014-3566 | CVE-2014-3566 | 
