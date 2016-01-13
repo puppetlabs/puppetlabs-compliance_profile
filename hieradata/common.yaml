@@ -114,9 +114,9 @@ ntpd::servers : {}
 # as needed.
 #
 #rsync::stunnel = hiera('puppet::server')
-#rsync::base : "/var/simp/rsync/%{::operatingsystem}/%{::lsbmajdistrelease}"
-#rsync::server : '127.0.0.1'
-#rsync::timeout : '1'
+rsync::base : "/var/simp/rsync/%{::operatingsystem}/%{::lsbmajdistrelease}"
+rsync::server : '127.0.0.1'
+rsync::timeout : '1'
 
 # Set the verbosity of AIDE. Note we can’t
 # use the module’s default value since it fails in PE 2015.x
@@ -141,4 +141,4 @@ use_iptables : false
 #
 # This sets the default runlevel the systems should boot to.
 # The default is 3
-simplib::runlevel : 3
+simplib::runlevel : '3'
