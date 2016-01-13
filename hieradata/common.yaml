@@ -28,16 +28,39 @@ dns::search :
 dns::servers :
   - '1.2.3.4'
 
-# === SSSD Options ===
-sssd::domains :
-  - "LDAP"
+# === PKI Options === 
+# Where to source the PKI infrastructure certs.  Here, we'll use the Puppet 
+# agent certs since # they work out of the box and are managed by the 
+# Puppet Master's CA. Note, this is only ideal in a production environment if 
+# the Puppet Master is configured with FIPS mode on in the kernel AND the 
+# master's hardware has a TPM.
+#
+# If you have your own way for distributing keys to systems, you can set the
+# path on the local system here and Puppet will ensure they are configured
+# for all the various services that require the PKI infrastructure.
+#
+# Please note that any key content changes enforced by Puppet will appear in 
+# the Puppet reports, so ensure access to PuppetDB is tightly controlled.
+pki::public_key_source: "/etc/puppetlabs/puppet/ssl/public_keys/%{::fqdn}.pem"
+pki::private_key_source: "/etc/puppetlabs/puppet/ssl/private_keys/%{::fqdn}.pem"
 
+
+# === SSSD Options ===
+# If you want to use sssd, you can enable it here.
+# Be sure to uncomment the LDAP domain if you enable LDAP below
+use_sssd: false
+sssd::domains :
+  - "LOCAL"
+# - "LDAP"
+
+# === Purge unmanaged configurations ===
 # Purge all unmanaged resources for each of the listed
-# resource types.
+# resource types. Once you're managing all the yumrepos
+# and users in Puppet, uncomment the user and yumrepo types.
 compliance::profile::purge_unmanaged_resource_types:
   - 'firewall'
-  - 'user'
-  - 'yumrepo'
+# - 'user'
+# - 'yumrepo'
 
 # === LDAP Options ===
 # Various LDAP-related settings. You *really* want to make sure that
@@ -48,19 +71,19 @@ compliance::profile::purge_unmanaged_resource_types:
 #
 # If you disable this, then modules will not attempt to use LDAP where
 # possible.
-#use_ldap : true
-#ldap::base_dn : 'dc=your,dc=domain'
-#ldap::bind_dn : "cn=hostAuth,ou=Hosts,%{hiera('ldap::base_dn')}"
-#ldap::bind_pw : 'your bind password'
-#ldap::bind_hash : 'Generate this with slappasswd!'
-#ldap::sync_dn : "cn=LDAPSync,ou=Hosts,%{hiera('ldap::base_dn')}"
-#ldap::sync_pw : 'your sync password'
-#ldap::sync_hash : 'Generate this with slappasswd!'
-#ldap::root_dn : "cn=LDAPAdmin,ou=People,%{hiera('ldap::base_dn')}"
-#ldap::root_hash : 'Generate this with slappasswd!'
-#ldap::uri :
-#  - "ldap://%{hiera('puppet::server')}"
-#ldap::master : ""
+use_ldap : false
+ldap::base_dn : 'dc=your,dc=domain'
+ldap::bind_dn : "cn=hostAuth,ou=Hosts,%{hiera('ldap::base_dn')}"
+ldap::bind_pw : 'your bind password'
+ldap::bind_hash : 'Generate this with slappasswd!'
+ldap::sync_dn : "cn=LDAPSync,ou=Hosts,%{hiera('ldap::base_dn')}"
+ldap::sync_pw : 'your sync password'
+ldap::sync_hash : 'Generate this with slappasswd!'
+ldap::root_dn : "cn=LDAPAdmin,ou=People,%{hiera('ldap::base_dn')}"
+ldap::root_hash : 'Generate this with slappasswd!'
+ldap::uri :
+  - ""
+ldap::master : ""
 
 # Your log server
 # log_server : 'syslog.your.domain'
@@ -69,6 +92,12 @@ compliance::profile::purge_unmanaged_resource_types:
 #
 # Left empty by default so that you are reminded to enter a value
 # here.
+# Example values:
+#   {
+#     'time.local.net' => ['iburst','minpoll 4', 'prefer'],
+#     # This one will just use defaults of ['minpoll 4', 'maxpoll 4', 'iburst']
+#     'time.other.net' => []
+#   }
 ntpd::servers : {}
 
 # === Rsync Options ===
@@ -108,5 +137,8 @@ use_auditd : true
 # modules that use the simp/iptables module.
 use_iptables : false
 
-# Management of Specific Classes
-simplib::runlevel : '3'
+# Default runlevel
+#
+# This sets the default runlevel the systems should boot to.
+# The default is 3
+simplib::runlevel : 3
