@@ -1,6 +1,7 @@
 class compliance::profile::redhat (
   String $simp_version,
-  Array $purge_unamanaged_resource_types
+  Array $purge_unamanaged_resource_types,
+  Boolean $use_ldap,
 ) {
   class {'compliance::profile::redhat::repositories':
     simp_version => $simp_version,
@@ -43,7 +44,9 @@ class compliance::profile::redhat (
   # everyone else from everywhere by default.
   include 'pam::access'
 
-  include 'openldap::pam'
+  if $use_ldap {
+    include 'openldap::pam'
+  }
 
   # Enable 'wheel' access controls.
   include 'pam::wheel'
@@ -59,7 +62,9 @@ class compliance::profile::redhat (
   include 'sudosh'
 
   # We want to ensure that only the services we define in Puppet are
-  # goig to be enabled and run.
+  # going to be enabled and run. This class attempts to kill any process
+  # running that’s not being managed by Puppet.  Note, this will *not*
+  # appear in the run reports.
   include 'svckill'
 
   # Add TPM support by default. This will grow over time but, if you have a

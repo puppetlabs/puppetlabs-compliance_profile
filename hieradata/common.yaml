@@ -71,7 +71,7 @@ compliance::profile::purge_unmanaged_resource_types:
 #
 # If you disable this, then modules will not attempt to use LDAP where
 # possible.
-use_ldap : false
+compliance::profile::use_ldap : false
 ldap::base_dn : 'dc=your,dc=domain'
 ldap::bind_dn : "cn=hostAuth,ou=Hosts,%{hiera('ldap::base_dn')}"
 ldap::bind_pw : 'your bind password'
