@@ -64,8 +64,13 @@ class compliance::profile::redhat (
   # We want to ensure that only the services we define in Puppet are
   # going to be enabled and run. This class attempts to kill any process
   # running that’s not being managed by Puppet.  Note, this will *not*
-  # appear in the run reports.
-  include 'svckill'
+  # appear in the run reports. This can wreak havoc until you’re
+  # managing all services in Puppet, so uncomment when you’re ready.
+  #include 'svckill'
+
+  # This class includes some basic services that almost every Red Hat 
+  # system will want.
+  include simp::base_services
 
   # Add TPM support by default. This will grow over time but, if you have a
   # TPM, you most likely want to use it!
